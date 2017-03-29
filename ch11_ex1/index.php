@@ -24,8 +24,8 @@ switch( $action ) {
         if (empty($new_task)) {
             $errors[] = 'The new task cannot be empty.';
         } else {
-            $task_list[] = $new_task;
-        }
+            array_push($task_list, $new_task;)
+	}
         break;
     case 'Delete Task':
         $task_index = filter_input(INPUT_POST, 'taskid', FILTER_VALIDATE_INT);
@@ -36,18 +36,43 @@ switch( $action ) {
             $task_list = array_values($task_list);
         }
         break;
-/*
+
     case 'Modify Task':
-    
+	$task_index = filter_input(INPUT_POST, 'taskid',FILTER_VALIDATE_INT);
+	if ($task_index === NULL || $task_index === FALSE) {
+	  $errors[] = 'The task cannot be modified.';
+	} else {
+	  $task_to_modify = $task_list[$task_index];
+	}
+									            break;
+
+
     case 'Save Changes':
-    
+	$task_index = filter_input(INPUT_POST, 'modifiedtaskid',FILTER_VALIDATE_INT);
+	$task_name = filter_input(INPUT_POST, 'modifiedtask');
+	if ($task_index === NULL || $task_index === FALSE ||
+	    $task_name === NULL || $task_name === FALSE) {
+	  $errors[] = 'The task cannot be modified.';
+	} else {
+	  $task_list[$task_index] = $task_name;
+	}
+
     case 'Cancel Changes':
-    
+	break;
+
     case 'Promote Task':
-        
+        $task_index = filter_input(INPUT_POST, 'taskid',FILTER_VALIDATE_INT);
+	if ($task_index === NULL || $task_index === FALSE || $task_index === 0) {
+	  $errors[] = 'The task cannot be promoted.';
+	} else {
+	    $temp = $task_list[$task_index - 1];
+	    $task_list[$task_index - 1] = $task_list[$task_index];
+	    $task_list[$task_index] = $temp;
+	}
+
     case 'Sort Tasks':
-    
-*/
+        sort($task_list);
+	break;
 }
 
 include('task_list.php');
